@@ -107,23 +107,27 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         let round = game.rounds[indexPath.row]
         cell.selectionStyle = .none
         
-        for numberLabel in cell.userCombinationLabels {
-            if numberLabel.gestureRecognizers == nil || numberLabel.gestureRecognizers!.isEmpty {
-                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapOnNumber))
+        for colorImageView in cell.userCombinationImageViews {
+            colorImageView.layer.cornerRadius = 16
+            
+            if colorImageView.gestureRecognizers == nil || colorImageView.gestureRecognizers!.isEmpty {
+                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapOnImageView))
                 tapGestureRecognizer.numberOfTapsRequired = 1
-                numberLabel.addGestureRecognizer(tapGestureRecognizer)
+                colorImageView.addGestureRecognizer(tapGestureRecognizer)
             }
             
-            if let number = round.userCombination[numberLabel.tag] {
-                numberLabel.text = number.description
+            if let number = round.userCombination[colorImageView.tag] {
+                colorImageView.image = Game.Color(rawValue: number)?.image()
             } else {
-                numberLabel.text = "_"
+                colorImageView.image = UIImage(named: "grey")
             }
             
-            if indexPath.row == game.rounds.count - 1, numberLabel.tag == round.selectedIndex {
-                numberLabel.font = UIFont.boldSystemFont(ofSize: 17.0)
+            if indexPath.row == game.rounds.count - 1, colorImageView.tag == round.selectedIndex {
+                colorImageView.layer.borderColor = UIColor(red: 0, green: 122/255, blue: 1, alpha: 1).cgColor
+                colorImageView.layer.borderWidth = 2.0
             } else {
-                numberLabel.font = UIFont.systemFont(ofSize: 17.0)
+                colorImageView.layer.borderColor = UIColor.clear.cgColor
+                colorImageView.layer.borderWidth = 0
             }
         }
         
@@ -139,8 +143,8 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     // MARK: - UITapGestureRecognizer Delegate Methods
-    @objc func handleTapOnNumber(gestureRecognizer: UIGestureRecognizer) {
-        //print(gestureRecognizer.view?.tag ?? "0")
+    @objc func handleTapOnImageView(gestureRecognizer: UIGestureRecognizer) {
+        print(gestureRecognizer.view?.tag ?? "0")
         let tapLocation = gestureRecognizer.location(in: roundsTableView)
         print(tapLocation.x)
         print(tapLocation.y)

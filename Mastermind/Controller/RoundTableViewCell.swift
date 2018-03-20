@@ -10,7 +10,7 @@ import UIKit
 
 class RoundTableViewCell: UITableViewCell {
 
-    @IBOutlet var userCombinationLabels: [UILabel]!
+    @IBOutlet var userCombinationImageViews: [UIImageView]!
     @IBOutlet weak var placedCounterLabel: UILabel!
     @IBOutlet weak var misplacedCounterLabel: UILabel!
     

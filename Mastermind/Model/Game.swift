@@ -10,6 +10,27 @@ import Foundation
 import GameplayKit
 
 class Game {
+    enum Color: Int {
+        case red = 0, green = 1, blue = 2, yellow = 3, black = 4, white = 5
+        
+        func image() -> UIImage {
+            switch self {
+            case .red:
+                return UIImage(named: "red")!
+            case .green:
+                return UIImage(named: "green")!
+            case .blue:
+                return UIImage(named: "blue")!
+            case .yellow:
+                return UIImage(named: "yellow")!
+            case .black:
+                return UIImage(named: "black")!
+            case .white:
+                return UIImage(named: "white")!
+            }
+        }
+    }
+    
     var secretCombination: [Int]
     var rounds: [Round]
     
@@ -40,7 +61,7 @@ class Game {
     private func getRandomSecretCombination() -> [Int] {
         var secretCombination = [Int]()
         for _ in 0..<4 {
-            secretCombination.append(GKRandomSource.sharedRandom().nextInt(upperBound: 5))
+            secretCombination.append(GKRandomSource.sharedRandom().nextInt(upperBound: 6))
         }
         print("======================")
         print("SECRET COMBINATION : \(secretCombination)")
