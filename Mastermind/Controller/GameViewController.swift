@@ -65,6 +65,9 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
             //print(lastUserCombination)
             game.endRound()
             roundsTableView.reloadData()
+            let lastRow = roundsTableView.numberOfRows(inSection: 0) - 1
+            let lastIndexPath = IndexPath(row: lastRow, section: 0)
+            roundsTableView.scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
         } else {
             let alert = UIAlertController(title: "Incomplete Combination", message: "You didn't fill the combination.", preferredStyle: .alert)
             let action = UIAlertAction(title: "OK", style: .default, handler: nil)
