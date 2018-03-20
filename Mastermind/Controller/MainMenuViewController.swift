@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainMenuViewController.swift
 //  Mastermind
 //
 //  Created by Sébastien Gaya on 20/03/2018.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainMenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
