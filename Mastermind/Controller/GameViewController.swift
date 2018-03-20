@@ -8,12 +8,26 @@
 
 import UIKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    // MARK: - Properties
+    var game = Game()
+    
+    // MARK: - Outlets
+    @IBOutlet weak var roundsCounterLabel: UILabel!
+    @IBOutlet weak var roundsTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        NotificationCenter.default.addObserver(self, selector: #selector(endGame), name: Notification.Name(rawValue: "endGame"), object: nil)
+        
+        roundsTableView.delegate = self
+        roundsTableView.dataSource = self
+        roundsTableView.layer.borderColor = UIColor.darkGray.cgColor
+        roundsTableView.layer.borderWidth = 1.0
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,7 +35,120 @@ class GameViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    @IBAction func numberBtnPressed(_ sender: UIButton) {
+        if let lastRound = game.rounds.last, lastRound.selectedIndex < 4 {
+            lastRound.userCombination[lastRound.selectedIndex] = sender.tag
+            lastRound.selectedIndex += 1
+            
+            let lastRow = roundsTableView.numberOfRows(inSection: 0) - 1
+            let lastIndexPath = IndexPath(row: lastRow, section: 0)
+            roundsTableView.reloadRows(at: [lastIndexPath], with: .none)
+        }
+        
+    }
+    
+    @IBAction func backspaceBtnPressed(_ sender: UIButton) {
+        if let lastRound = game.rounds.last {
+            if lastRound.selectedIndex > 0 {
+                lastRound.selectedIndex -= 1
+            }
+            
+            lastRound.userCombination[lastRound.selectedIndex] = nil
+            let lastRow = roundsTableView.numberOfRows(inSection: 0) - 1
+            let lastIndexPath = IndexPath(row: lastRow, section: 0)
+            roundsTableView.reloadRows(at: [lastIndexPath], with: .none)
+        }
+    }
+    
+    @IBAction func checkBtnPressed(_ sender: UIButton) {
+        if let lastRound = game.rounds.last, let _ = lastRound.userCombination as? [Int] {
+            //print(lastUserCombination)
+            game.endRound()
+            roundsTableView.reloadData()
+        } else {
+            let alert = UIAlertController(title: "Incomplete Combination", message: "You didn't fill the combination.", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func endGame() {
+        let alert = UIAlertController(title: "You Win !", message: "You found the combination in \(game.rounds.count) try/tries ! It was \(game.secretCombination)", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Go to Main Menu", style: .default) { (action) in
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    // MARK: - UITableView Delegate & Data Source Methods
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return game.rounds.count
+    }
+    
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "roundTableViewCell") as? RoundTableViewCell else {
+            fatalError("Can't instantiate RoundTableViewCell")
+        }
+        
+        let round = game.rounds[indexPath.row]
+        cell.selectionStyle = .none
+        
+        for numberLabel in cell.userCombinationLabels {
+            if numberLabel.gestureRecognizers == nil || numberLabel.gestureRecognizers!.isEmpty {
+                let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapOnNumber))
+                tapGestureRecognizer.numberOfTapsRequired = 1
+                numberLabel.addGestureRecognizer(tapGestureRecognizer)
+            }
+            
+            if let number = round.userCombination[numberLabel.tag] {
+                numberLabel.text = number.description
+            } else {
+                numberLabel.text = "_"
+            }
+            
+            if indexPath.row == game.rounds.count - 1, numberLabel.tag == round.selectedIndex {
+                numberLabel.font = UIFont.boldSystemFont(ofSize: 17.0)
+            } else {
+                numberLabel.font = UIFont.systemFont(ofSize: 17.0)
+            }
+        }
+        
+        cell.placedCounterLabel.text = "Good : \(round.placedCount?.description ?? "?")"
+        cell.misplacedCounterLabel.text = "Almost Good : \(round.misplacedCount?.description ?? "?")"
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        print(indexPath.row)
+    }
+    
+    // MARK: - UITapGestureRecognizer Delegate Methods
+    @objc func handleTapOnNumber(gestureRecognizer: UIGestureRecognizer) {
+        //print(gestureRecognizer.view?.tag ?? "0")
+        let tapLocation = gestureRecognizer.location(in: roundsTableView)
+        print(tapLocation.x)
+        print(tapLocation.y)
+        if let selectedIndexPath = roundsTableView.indexPathForRow(at: tapLocation) {
+            print(selectedIndexPath.row)
+            self.game.rounds[selectedIndexPath.row].selectedIndex = gestureRecognizer.view!.tag
+            roundsTableView.reloadRows(at: [selectedIndexPath], with: .none)
+        }
+    }
+    
+    
     /*
     // MARK: - Navigation
 
