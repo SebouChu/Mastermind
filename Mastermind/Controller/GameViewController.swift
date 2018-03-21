@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import AVFoundation
 
 class GameViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     // MARK: - Properties
     var game = Game()
+    var audioPlayer = AVAudioPlayer()
+    
     var colorButtonsOriginalPositions = [Int: CGPoint]()
     var hoverImageViewTag: Int = -1
     
@@ -92,7 +95,9 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.navigationController?.popToRootViewController(animated: true)
         }
         alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
+        self.present(alert, animated: true) {
+            self.playSound(named: "ah")
+        }
     }
     
     // MARK: - UITableView Delegate & Data Source Methods
@@ -216,6 +221,20 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         default:
             break
         }
+    }
+    
+    // MARK: - AVFoundation Methods
+    
+    func playSound(named soundFileName: String) {
+        let soundURL = Bundle.main.url(forResource: soundFileName, withExtension: "wav")
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundURL!)
+        } catch {
+            print(error)
+        }
+        
+        audioPlayer.play()
     }
     
     /*
