@@ -12,16 +12,26 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     // MARK: - Properties
     var game = Game()
+    var colorButtonsOriginalPositions = [Int: CGPoint]()
+    var hoverImageViewTag: Int = -1
     
     // MARK: - Outlets
     @IBOutlet weak var roundsCounterLabel: UILabel!
     @IBOutlet weak var roundsTableView: UITableView!
+    @IBOutlet var colorButtons: [UIButton]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         NotificationCenter.default.addObserver(self, selector: #selector(endGame), name: Notification.Name(rawValue: "endGame"), object: nil)
+        
+        for i in 0..<colorButtons.count {
+            let colorButton = colorButtons[i]
+            let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanOnButton))
+            colorButton.addGestureRecognizer(panGestureRecognizer)
+            colorButtonsOriginalPositions[colorButton.tag] = colorButton.center
+        }
         
         roundsTableView.delegate = self
         roundsTableView.dataSource = self
@@ -38,7 +48,7 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBAction func numberBtnPressed(_ sender: UIButton) {
         if let lastRound = game.rounds.last, lastRound.selectedIndex < 4 {
             lastRound.userCombination[lastRound.selectedIndex] = sender.tag
-            lastRound.selectedIndex += 1
+            lastRound.updateSelectedIndex()
             
             let lastRow = roundsTableView.numberOfRows(inSection: 0) - 1
             let lastIndexPath = IndexPath(row: lastRow, section: 0)
@@ -142,8 +152,9 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         print(indexPath.row)
     }
     
-    // MARK: - UITapGestureRecognizer Delegate Methods
-    @objc func handleTapOnImageView(gestureRecognizer: UIGestureRecognizer) {
+    // MARK: - UIGestureRecognizer Handle Methods
+    
+    @objc func handleTapOnImageView(gestureRecognizer: UITapGestureRecognizer) {
         print(gestureRecognizer.view?.tag ?? "0")
         let tapLocation = gestureRecognizer.location(in: roundsTableView)
         print(tapLocation.x)
@@ -155,6 +166,57 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    @objc func handlePanOnButton(gestureRecognizer: UIPanGestureRecognizer) {
+        switch gestureRecognizer.state {
+        case .began:
+            break
+        case .changed:
+            let translation = gestureRecognizer.translation(in: self.view)
+            if let colorButton = gestureRecognizer.view {
+                colorButton.center = CGPoint(x: colorButton.center.x + translation.x, y: colorButton.center.y + translation.y)
+                // Check if last cell visible & new center of dragged color button
+                let lastIndex = roundsTableView.numberOfRows(inSection: 0) - 1
+                let lastIndexPath = IndexPath(row: lastIndex, section: 0)
+                let lastCell = roundsTableView.cellForRow(at: lastIndexPath) as! RoundTableViewCell
+                if roundsTableView.visibleCells.contains(lastCell) {
+                    var newHoverImageViewTag: Int = -1
+                    for imageView in lastCell.userCombinationImageViews {
+                        if let newCenter = colorButton.superview?.convert(colorButton.center, to: imageView), imageView.layer.visibleRect.contains(newCenter) {
+                            newHoverImageViewTag = imageView.tag
+                            break
+                        }
+                    }
+                    if hoverImageViewTag != newHoverImageViewTag {
+                        hoverImageViewTag = newHoverImageViewTag
+                        if hoverImageViewTag != -1 {
+                            game.rounds[lastIndex].selectedIndex = hoverImageViewTag
+                            roundsTableView.reloadRows(at: [lastIndexPath], with: .none)
+                        } else {
+                        }
+                    }
+                }
+            }
+            gestureRecognizer.setTranslation(CGPoint.zero, in: self.view)
+            break
+        case .ended:
+            if let colorButton = gestureRecognizer.view {
+                if hoverImageViewTag != -1 {
+                    let lastRow = roundsTableView.numberOfRows(inSection: 0) - 1
+                    let roundSelectedIndex = game.rounds[lastRow].selectedIndex
+                    game.rounds[lastRow].userCombination[roundSelectedIndex] = colorButton.tag
+                    game.rounds[lastRow].updateSelectedIndex()
+                    let lastIndexPath = IndexPath(row: lastRow, section: 0)
+                    roundsTableView.reloadRows(at: [lastIndexPath], with: .none)
+                }
+                
+                colorButton.center = colorButtonsOriginalPositions[colorButton.tag]!
+                colorButton.updateConstraintsIfNeeded()
+                hoverImageViewTag = -1
+            }
+        default:
+            break
+        }
+    }
     
     /*
     // MARK: - Navigation

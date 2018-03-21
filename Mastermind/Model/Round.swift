@@ -17,4 +17,29 @@ class Round {
     init() {
         self.userCombination = [nil, nil, nil, nil]
     }
+    
+    func updateSelectedIndex() {
+        if self.selectedIndex == 4 { return }
+        
+        var emptyIndexes = [Int]()
+        for i in 0..<userCombination.count {
+            if userCombination[i] == nil {
+                emptyIndexes.append(i)
+            }
+        }
+        
+        let nextEmptyIndexes = emptyIndexes.filter({ (x) -> Bool in
+            return x > selectedIndex
+        })
+        
+        if emptyIndexes.isEmpty && selectedIndex < 4 {
+            selectedIndex += 1
+        } else {
+            if nextEmptyIndexes.isEmpty {
+                selectedIndex = emptyIndexes[0]
+            } else {
+                selectedIndex = nextEmptyIndexes[0]
+            }
+        }
+    }
 }
