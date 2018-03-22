@@ -40,6 +40,9 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         roundsTableView.dataSource = self
         roundsTableView.layer.borderColor = UIColor.darkGray.cgColor
         roundsTableView.layer.borderWidth = 1.0
+        roundsCounterLabel.text = "Round n°\(game.rounds.count)"
+        
+        playSound(named: "here-we-go")
         
     }
 
@@ -77,6 +80,7 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         if let lastRound = game.rounds.last, let _ = lastRound.userCombination as? [Int] {
             //print(lastUserCombination)
             game.endRound()
+            roundsCounterLabel.text = "Round n°\(game.rounds.count)"
             roundsTableView.reloadData()
             let lastRow = roundsTableView.numberOfRows(inSection: 0) - 1
             let lastIndexPath = IndexPath(row: lastRow, section: 0)
@@ -90,7 +94,7 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func endGame() {
-        let alert = UIAlertController(title: "You Win !", message: "You found the combination in \(game.rounds.count) try/tries ! It was \(game.secretCombination)", preferredStyle: .alert)
+        let alert = UIAlertController(title: "You Win !", message: "You found the combination in \(game.rounds.count) tries ! It was \(game.secretCombination)", preferredStyle: .alert)
         let action = UIAlertAction(title: "Go to Main Menu", style: .default) { (action) in
             self.navigationController?.popToRootViewController(animated: true)
         }
