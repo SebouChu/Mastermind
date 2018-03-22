@@ -29,17 +29,30 @@ class Game {
                 return UIImage(named: "white")!
             }
         }
+        
+        static func allValues() -> [Color] {
+            var colors = [Color]()
+            for i in 0...5 {
+                colors.append(Color(rawValue: i)!)
+            }
+            return colors
+        }
     }
     
     var secretCombination: [Int]
     var rounds: [Round]
+    var aiRounds: [Round]
     
     init() {
         self.secretCombination = [Int]()
         self.rounds = [Round]()
+        self.aiRounds = [Round]()
         
         self.secretCombination = self.getRandomSecretCombination()
         self.rounds.append(Round())
+        self.aiRounds.append(Round())
+        
+        getAISolve()
     }
     
     func endRound() {
@@ -69,7 +82,7 @@ class Game {
         return secretCombination
     }
     
-    private func checkCombination(_ userCombination: [Int]) -> [String: Int] {
+    private func checkCombination(_ userCombination: [Int], asAI: Bool = false) -> [String: Int] {
         var placedCount = 0
         var misplacedCount = 0
         var secretCopy = secretCombination
@@ -88,9 +101,203 @@ class Game {
                 userCopy[j] = -1
             }
         }
+    
+        if asAI {
+            print("Avec \(userCombination) | Good : \(placedCount) / Almost Good : \(misplacedCount)")
+            aiRounds.last!.userCombination = userCombination
+            aiRounds.last!.placedCount = placedCount
+            aiRounds.last!.misplacedCount = misplacedCount
+            
+            if placedCount != 4 {
+                aiRounds.append(Round())
+            }
+        }
         
         return ["placed": placedCount, "misplaced": misplacedCount]
     }
+    
+    private func getAISolve() {
+        let mastermindColors = Game.Color.allValues()
+        
+        var secretComposition = [Int]()
+        var secretHisto = [Int: Int]()
+        var testCombination = [Int]()
+        var lastCompoElements = [Int]()
+        
+        var unusedColor : Int = -1
+        
+        // En cas de deux fois même couleur
+        var twiceColor: Int = -1
+        
+        // En cas de trois fois même couleur
+        var threeTimesColor: Int = -1
+        
+        // On teste chaque couleur. On détermine la composition et une couleur non utilisée
+        print("## DEBUT DES TESTS DE CHAQUE COULEUR ##")
+        for i in 0..<mastermindColors.count {
+            let color = mastermindColors[i]
+            let fullColorCombination = [color.rawValue, color.rawValue, color.rawValue, color.rawValue]
+            let fullColorResponse = checkCombination(fullColorCombination, asAI: true)
+            if fullColorResponse["placed"] == 4 {
+                return
+            } else if fullColorResponse["placed"] == 0 {
+                if unusedColor == -1 {
+                    unusedColor = color.rawValue
+                }
+            } else {
+                secretHisto[color.rawValue] = fullColorResponse["placed"]
+                if fullColorResponse["placed"]! == 2 && twiceColor == -1 {
+                    twiceColor = color.rawValue
+                }
+                if fullColorResponse["placed"]! == 3 {
+                    threeTimesColor = color.rawValue
+                }
+                for _ in 1...fullColorResponse["placed"]! {
+                    secretComposition.append(color.rawValue)
+                }
+            }
+            if secretComposition.count == 4 {
+                break
+            } else if secretComposition.count <= 3 && i == mastermindColors.count - 2 {
+                secretHisto[mastermindColors.last!.rawValue] = 4 - secretComposition.count
+                while secretComposition.count < 4 {
+                    secretComposition.append(mastermindColors.last!.rawValue)
+                }
+                break
+            }
+        }
+        
+        print("> Composition is : \(secretComposition) <")
+        print("## FIN DES TESTS DE CHAQUE COULEUR ##")
+        print("")
+        print("")
+        
+        if threeTimesColor != -1 {
+            // Une couleur apparaît trois fois
+            print("## DEBUT DE RESOLUTION (3 TIMES COLOR) ##")
+            var uniqueColor = -1
+            for number in secretComposition {
+                if number != threeTimesColor {
+                    uniqueColor = number
+                    break
+                }
+            }
+            testCombination = [uniqueColor, threeTimesColor, threeTimesColor, threeTimesColor]
+            var currentUniqueIndex = 0
+            var goodCombination = false
+            while (!goodCombination) {
+                let testResults = checkCombination(testCombination, asAI: true)
+                if testResults["placed"]! == 4 {
+                    goodCombination = true
+                } else {
+                    testCombination.swapAt(currentUniqueIndex, currentUniqueIndex+1)
+                    currentUniqueIndex += 1
+                }
+            }
+            print("## FIN DE RESOLUTION (3 TIMES COLOR) ##")
+        } else {
+            var oldTestCombination = [Int]()
+            
+            var hasTwoGoodColors = false // Signale deux bonnes couleurs
+            var hadOneGood = false // Signale une bonne couleur sur le tour précédent
+            var didInvertedColors = false // Signale une inversion des couleurs sur le tour précédent
+            var didReversedCombination = false // Signale une inversion deux par deux sur le tour précédent
+            var firstGoodColor = -1 // Valeur de la première bonne couleur
+            
+            if twiceColor != -1 {
+                // Couleur en double
+                print("## DEBUT DE RESOLUTION AVEC COULEUR 2X ##")
+                var uniqueIndexes = [Int]()
+                for i in 0..<secretComposition.count where secretComposition[i] != twiceColor {
+                    uniqueIndexes.append(i)
+                }
+                testCombination = [secretComposition[uniqueIndexes[0]], secretComposition[uniqueIndexes[1]]]
+                lastCompoElements = [twiceColor, twiceColor]
+            } else {
+                // Résolution de base
+                print("## DEBUT DE RESOLUTION DE BASE ##")
+                testCombination = [secretComposition[0], secretComposition[1]]
+                lastCompoElements = [secretComposition[2], secretComposition[3]]
+            }
+            
+            for _ in 0...1 {
+                testCombination.append(unusedColor)
+            }
+            
+            // On cherche à avoir deux bonnes couleurs
+            while (!hasTwoGoodColors) {
+                let testResults = checkCombination(testCombination, asAI: true)
+                if testResults["placed"]! == 2 {
+                    // Deux bonnes couleurs
+                    hasTwoGoodColors = true
+                } else if testResults["placed"]! == 1 {
+                    // Une bonne couleur, on teste si deuxième pas bonne
+                    oldTestCombination = testCombination
+                    if !hadOneGood {
+                        // Pas de bonne couleur avant
+                        hadOneGood = true
+                        testCombination.swapAt(1, 2)
+                    } else {
+                        // Une bonne couleur avant
+                        if firstGoodColor == -1 {
+                            // Bonne couleur à l'index 0
+                            firstGoodColor = testCombination[0]
+                        }
+                        testCombination.swapAt(2, 3)
+                    }
+                    
+                } else {
+                    // Pas de bonne couleur
+                    if !hadOneGood {
+                        // Aucune bonne couleur avant
+                        oldTestCombination = testCombination
+                        
+                        if !didInvertedColors {
+                            // Tentative d'inversion des couleurs
+                            if didReversedCombination {
+                                testCombination.swapAt(2, 3)
+                            } else {
+                                testCombination.swapAt(0, 1)
+                            }
+                            didInvertedColors = true
+                        } else {
+                            var unusedIndexes = [Int]()
+                            for i in 0..<testCombination.count where testCombination[i] == unusedColor {
+                                unusedIndexes.append(i)
+                            }
+                            testCombination.swapAt(0, unusedIndexes[0])
+                            testCombination.swapAt(1, unusedIndexes[1])
+                            didInvertedColors = false
+                            didReversedCombination = true
+                        }
+                    } else {
+                        // Une bonne couleur avant donc à l'index 1
+                        testCombination = oldTestCombination
+                        firstGoodColor = testCombination[1]
+                        testCombination.swapAt(0, 2)
+                    }
+                }
+            }
+            
+            // On teste les deux dernières couleurs
+            var lastUnusedIndexes = [Int]()
+            for i in 0..<testCombination.count where testCombination[i] == unusedColor {
+                lastUnusedIndexes.append(i)
+            }
+            
+            for i in 0...1 {
+                testCombination[lastUnusedIndexes[i]] = lastCompoElements[i]
+            }
+            
+            let testResults = checkCombination(testCombination, asAI: true)
+            if testResults["placed"] != 4 {
+                // Bonne combinaison si on inverse les dernières couleurs entrées
+                testCombination.swapAt(lastUnusedIndexes[0], lastUnusedIndexes[1])
+            }
+            print("## FIN DE RESOLUTION DE BASE ##")
+        }
+    }
+
     
     private func updateCounts(_ round: Round, with counts: [String: Int]) {
         round.placedCount = counts["placed"]

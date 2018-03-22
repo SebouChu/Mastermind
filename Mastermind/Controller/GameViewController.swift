@@ -124,6 +124,11 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         let round = game.rounds[indexPath.row]
+        var aiRound: Round?
+        if indexPath.row < game.aiRounds.count {
+            aiRound = game.aiRounds[indexPath.row]
+        }
+        
         cell.selectionStyle = .none
         
         for colorImageView in cell.userCombinationImageViews {
@@ -149,9 +154,44 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
                 colorImageView.layer.borderWidth = 0
             }
         }
+            
+        var placedText = "Placed : "
+        if let myPlacedCount = round.placedCount {
+            placedText += "\(myPlacedCount.description) "
+            if aiRound != nil && aiRound!.placedCount != 4 {
+                placedText += "(AI : \(aiRound!.placedCount!.description))"
+            } else {
+                placedText += "(AI : Trouvé)"
+            }
+        } else {
+            placedText += "? "
+            if aiRound != nil && aiRound!.placedCount != 4 {
+                placedText += "(AI : ?)"
+            } else {
+                placedText += "(AI : Trouvé)"
+            }
+        }
         
-        cell.placedCounterLabel.text = "Good : \(round.placedCount?.description ?? "?")"
-        cell.misplacedCounterLabel.text = "Almost Good : \(round.misplacedCount?.description ?? "?")"
+        
+        var misplacedText = "Misplaced : "
+        if let myMisplacedCount = round.misplacedCount {
+            misplacedText += "\(myMisplacedCount.description) "
+            if aiRound != nil && aiRound!.placedCount != 4 {
+                misplacedText += "(AI : \(aiRound!.misplacedCount!.description))"
+            } else {
+                misplacedText += "(AI : Trouvé)"
+            }
+        } else {
+            misplacedText += "? "
+            if aiRound != nil && aiRound!.placedCount != 4 {
+                misplacedText += "(AI : ?)"
+            } else {
+                misplacedText += "(AI : Trouvé)"
+            }
+        }
+        
+        cell.placedCounterLabel.text = placedText
+        cell.misplacedCounterLabel.text = misplacedText
         
         return cell
     }
