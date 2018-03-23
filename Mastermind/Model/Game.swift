@@ -128,6 +128,7 @@ class Game {
         
         // En cas de deux fois même couleur
         var twiceColor: Int = -1
+        var doubleTwice: Bool = false
         
         // En cas de trois fois même couleur
         var threeTimesColor: Int = -1
@@ -146,8 +147,12 @@ class Game {
                 }
             } else {
                 secretHisto[color.rawValue] = fullColorResponse["placed"]
-                if fullColorResponse["placed"]! == 2 && twiceColor == -1 {
-                    twiceColor = color.rawValue
+                if fullColorResponse["placed"]! == 2 {
+                    if twiceColor == -1 {
+                        twiceColor = color.rawValue
+                    } else {
+                        doubleTwice = true
+                    }
                 }
                 if fullColorResponse["placed"]! == 3 {
                     threeTimesColor = color.rawValue
@@ -159,7 +164,20 @@ class Game {
             if secretComposition.count == 4 {
                 break
             } else if secretComposition.count <= 3 && i == mastermindColors.count - 2 {
-                secretHisto[mastermindColors.last!.rawValue] = 4 - secretComposition.count
+                let lastColorCount = 4 - secretComposition.count
+                secretHisto[mastermindColors.last!.rawValue] = lastColorCount
+                
+                if lastColorCount == 2 {
+                    if twiceColor == -1 {
+                        twiceColor = mastermindColors.last!.rawValue
+                    } else {
+                        doubleTwice = true
+                    }
+                }
+                if lastColorCount == 3 {
+                    threeTimesColor = mastermindColors.last!.rawValue
+                }
+                
                 while secretComposition.count < 4 {
                     secretComposition.append(mastermindColors.last!.rawValue)
                 }
@@ -204,8 +222,13 @@ class Game {
             var didReversedCombination = false // Signale une inversion deux par deux sur le tour précédent
             var firstGoodColor = -1 // Valeur de la première bonne couleur
             
-            if twiceColor != -1 {
-                // Couleur en double
+            if doubleTwice {
+                // Deux couleurs en double
+                print("## DEBUT DE RESOLUTION AVEC 2 COULEURS 2X ##")
+                testCombination = [secretComposition[0], secretComposition[2]]
+                lastCompoElements = [secretComposition[1], secretComposition[3]]
+            } else if twiceColor != -1 {
+                // Une couleur en double
                 print("## DEBUT DE RESOLUTION AVEC COULEUR 2X ##")
                 var uniqueIndexes = [Int]()
                 for i in 0..<secretComposition.count where secretComposition[i] != twiceColor {
@@ -288,12 +311,14 @@ class Game {
             for i in 0...1 {
                 testCombination[lastUnusedIndexes[i]] = lastCompoElements[i]
             }
-            
-            let testResults = checkCombination(testCombination, asAI: true)
-            if testResults["placed"] != 4 {
-                // Bonne combinaison si on inverse les dernières couleurs entrées
-                testCombination.swapAt(lastUnusedIndexes[0], lastUnusedIndexes[1])
+            if twiceColor == -1 || doubleTwice {
+                let testResults = checkCombination(testCombination, asAI: true)
+                if testResults["placed"] != 4 {
+                    // Bonne combinaison si on inverse les dernières couleurs entrées
+                    testCombination.swapAt(lastUnusedIndexes[0], lastUnusedIndexes[1])
+                }
             }
+            
             print("## FIN DE RESOLUTION DE BASE ##")
         }
     }
