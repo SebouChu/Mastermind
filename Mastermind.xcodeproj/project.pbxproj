@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		6D573F0280527272573B70BE /* Pods_Mastermind.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5EEA651A95122A5F211F5C5 /* Pods_Mastermind.framework */; };
 		D00280602063A10600C87648 /* here-we-go.wav in Resources */ = {isa = PBXBuildFile; fileRef = D002805F2063A10600C87648 /* here-we-go.wav */; };
+		D0057CB3206928B900A0AD83 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0057CB2206928B900A0AD83 /* RegisterViewController.swift */; };
+		D0057CB5206928CC00A0AD83 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0057CB4206928CC00A0AD83 /* LoginViewController.swift */; };
 		D02F24D22060EABD003D78E6 /* RoundTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02F24D12060EABD003D78E6 /* RoundTableViewCell.swift */; };
 		D02F24D42060EAD1003D78E6 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02F24D32060EAD1003D78E6 /* Game.swift */; };
 		D02F24D62060EADB003D78E6 /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02F24D52060EADB003D78E6 /* Round.swift */; };
@@ -27,6 +29,8 @@
 		241EC39FDF64021A24CA7C3B /* Pods-Mastermind.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mastermind.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Mastermind/Pods-Mastermind.debug.xcconfig"; sourceTree = "<group>"; };
 		B5EEA651A95122A5F211F5C5 /* Pods_Mastermind.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Mastermind.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D002805F2063A10600C87648 /* here-we-go.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "here-we-go.wav"; sourceTree = "<group>"; };
+		D0057CB2206928B900A0AD83 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		D0057CB4206928CC00A0AD83 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D02F24D12060EABD003D78E6 /* RoundTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundTableViewCell.swift; sourceTree = "<group>"; };
 		D02F24D32060EAD1003D78E6 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		D02F24D52060EADB003D78E6 /* Round.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 			children = (
 				D0A8B7542060E67E00F5E543 /* AppDelegate.swift */,
 				D0A8B7562060E67E00F5E543 /* MainMenuViewController.swift */,
+				D0057CB2206928B900A0AD83 /* RegisterViewController.swift */,
+				D0057CB4206928CC00A0AD83 /* LoginViewController.swift */,
 				D0A8B76A2060E7CA00F5E543 /* GameViewController.swift */,
 				D02F24D12060EABD003D78E6 /* RoundTableViewCell.swift */,
 			);
@@ -291,7 +297,9 @@
 			files = (
 				D0A8B7572060E67E00F5E543 /* MainMenuViewController.swift in Sources */,
 				D02F24D42060EAD1003D78E6 /* Game.swift in Sources */,
+				D0057CB3206928B900A0AD83 /* RegisterViewController.swift in Sources */,
 				D0A8B76B2060E7CA00F5E543 /* GameViewController.swift in Sources */,
+				D0057CB5206928CC00A0AD83 /* LoginViewController.swift in Sources */,
 				D02F24D22060EABD003D78E6 /* RoundTableViewCell.swift in Sources */,
 				D02F24D62060EADB003D78E6 /* Round.swift in Sources */,
 				D0A8B7552060E67E00F5E543 /* AppDelegate.swift in Sources */,
