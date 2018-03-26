@@ -50,8 +50,8 @@ class MainMenuViewController: UIViewController {
             })
             let dismissAction = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
             
-            alert.addAction(disconnectAction)
             alert.addAction(dismissAction)
+            alert.addAction(disconnectAction)
             
             self.present(alert, animated: true)
         } else {

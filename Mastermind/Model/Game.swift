@@ -42,6 +42,19 @@ class Game {
     var secretCombination: [Int]
     var rounds: [Round]
     var aiRounds: [Round]
+    var timestamp = 0
+    
+    var userCombinations: [[Int]] {
+        get {
+            var combinations = [[Int]]()
+            for round in rounds {
+                if let combination = round.userCombination as? [Int] {
+                    combinations.append(combination)
+                }
+            }
+            return combinations
+        }
+    }
     
     init() {
         self.secretCombination = [Int]()
@@ -55,11 +68,30 @@ class Game {
         getAISolve()
     }
     
+    init(secret secretCombination: [Int], combinations userCombinations: [[Int]], timestamp: Int) {
+        self.secretCombination = secretCombination
+        self.timestamp = timestamp
+        
+        self.rounds = [Round]()
+        
+        self.aiRounds = [Round]()
+        self.aiRounds.append(Round())
+        
+        for userCombination in userCombinations {
+            let round = Round(combination: userCombination)
+            let result = self.checkCombination(userCombination)
+            round.placedCount = result["placed"]
+            round.misplacedCount = result["misplaced"]
+            rounds.append(round)
+        }
+    }
+    
     func endRound() {
         if let lastRound = rounds.last, let lastUserCombination = lastRound.userCombination as? [Int] {
             let counts = self.checkCombination(lastUserCombination)
             self.updateCounts(lastRound, with: counts)
             if counts["placed"] == 4 {
+                self.timestamp = Int(Date().timeIntervalSince1970)
                 let endNotification = Notification(name: Notification.Name(rawValue: "endGame"))
                 NotificationCenter.default.post(endNotification)
             } else {

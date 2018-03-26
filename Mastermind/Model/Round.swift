@@ -18,6 +18,10 @@ class Round {
         self.userCombination = [nil, nil, nil, nil]
     }
     
+    init(combination userCombination: [Int]) {
+        self.userCombination = userCombination
+    }
+    
     func updateSelectedIndex() {
         if self.selectedIndex == 4 { return }
         

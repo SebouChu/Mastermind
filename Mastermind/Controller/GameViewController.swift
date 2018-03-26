@@ -8,6 +8,8 @@
 
 import UIKit
 import AVFoundation
+import FirebaseAuth
+import FirebaseDatabase
 
 class GameViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -94,6 +96,20 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     @objc func endGame() {
+        if let currentUser = Auth.auth().currentUser {
+            let timestamp = game.timestamp
+            let secretCombination = game.secretCombination
+            let userCombinations = game.userCombinations
+            
+            let db = Database.database().reference().child("users/\(currentUser.uid)/games")
+            db.childByAutoId().setValue([
+                "secretCombination": secretCombination,
+                "userCombinations": userCombinations,
+                "timestamp": timestamp
+            ])
+        }
+        
+        
         let alert = UIAlertController(title: "You Win !", message: "You found the combination in \(game.rounds.count) tries ! It was \(game.secretCombination)", preferredStyle: .alert)
         let action = UIAlertAction(title: "Go to Main Menu", style: .default) { (action) in
             self.navigationController?.popToRootViewController(animated: true)
@@ -158,14 +174,14 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         var placedText = "Placed : "
         if let myPlacedCount = round.placedCount {
             placedText += "\(myPlacedCount.description) "
-            if aiRound != nil && aiRound!.placedCount != 4 {
+            if aiRound != nil && aiRound!.placedCount != nil && aiRound!.placedCount != 4 {
                 placedText += "(AI : \(aiRound!.placedCount!.description))"
             } else {
                 placedText += "(AI : Trouvé)"
             }
         } else {
             placedText += "? "
-            if aiRound != nil && aiRound!.placedCount != 4 {
+            if aiRound != nil && aiRound!.placedCount != nil && aiRound!.placedCount != 4 {
                 placedText += "(AI : ?)"
             } else {
                 placedText += "(AI : Trouvé)"
@@ -176,14 +192,14 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
         var misplacedText = "Misplaced : "
         if let myMisplacedCount = round.misplacedCount {
             misplacedText += "\(myMisplacedCount.description) "
-            if aiRound != nil && aiRound!.placedCount != 4 {
+            if aiRound != nil && aiRound!.placedCount != nil && aiRound!.placedCount != 4 {
                 misplacedText += "(AI : \(aiRound!.misplacedCount!.description))"
             } else {
                 misplacedText += "(AI : Trouvé)"
             }
         } else {
             misplacedText += "? "
-            if aiRound != nil && aiRound!.placedCount != 4 {
+            if aiRound != nil && aiRound!.placedCount != nil && aiRound!.placedCount != 4 {
                 misplacedText += "(AI : ?)"
             } else {
                 misplacedText += "(AI : Trouvé)"
