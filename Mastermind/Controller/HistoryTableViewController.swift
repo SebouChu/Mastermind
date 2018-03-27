@@ -14,6 +14,8 @@ import FirebaseDatabase
 class HistoryTableViewController: UITableViewController {
     
     var games = [Game]()
+    var selectedIndex: Int = 0
+    
     @IBOutlet weak var refreshBarButton: UIBarButtonItem!
     
     override func viewDidLoad() {
@@ -130,6 +132,8 @@ class HistoryTableViewController: UITableViewController {
  
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        self.selectedIndex = indexPath.row
+        self.performSegue(withIdentifier: "goToOldGame", sender: self)
     }
 
     /*
@@ -167,14 +171,19 @@ class HistoryTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "goToOldGame" {
+            guard let oldGameTVC = segue.destination as? OldGameTableViewController else {
+                fatalError("Can't cast to OldGameTableViewController")
+            }
+            
+            oldGameTVC.game = self.games[self.selectedIndex]
+        }
     }
-    */
+    
 
 }

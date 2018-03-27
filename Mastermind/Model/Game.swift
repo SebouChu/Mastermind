@@ -135,7 +135,7 @@ class Game {
         }
     
         if asAI {
-            print("Avec \(userCombination) | Good : \(placedCount) / Almost Good : \(misplacedCount)")
+            //print("Avec \(userCombination) | Good : \(placedCount) / Almost Good : \(misplacedCount)")
             aiRounds.last!.userCombination = userCombination
             aiRounds.last!.placedCount = placedCount
             aiRounds.last!.misplacedCount = misplacedCount
@@ -148,7 +148,7 @@ class Game {
         return ["placed": placedCount, "misplaced": misplacedCount]
     }
     
-    private func getAISolve() {
+    func getAISolve(verbose: Bool = false) {
         let mastermindColors = Game.Color.allValues()
         
         var secretComposition = [Int]()
@@ -166,7 +166,7 @@ class Game {
         var threeTimesColor: Int = -1
         
         // On teste chaque couleur. On détermine la composition et une couleur non utilisée
-        print("## DEBUT DES TESTS DE CHAQUE COULEUR ##")
+        if verbose { print("## DEBUT DES TESTS DE CHAQUE COULEUR ##") }
         for i in 0..<mastermindColors.count {
             let color = mastermindColors[i]
             let fullColorCombination = [color.rawValue, color.rawValue, color.rawValue, color.rawValue]
@@ -217,14 +217,16 @@ class Game {
             }
         }
         
-        print("> Composition is : \(secretComposition) <")
-        print("## FIN DES TESTS DE CHAQUE COULEUR ##")
-        print("")
-        print("")
+        if verbose {
+            print("> Composition is : \(secretComposition) <")
+            print("## FIN DES TESTS DE CHAQUE COULEUR ##")
+            print("")
+            print("")
+        }
         
         if threeTimesColor != -1 {
             // Une couleur apparaît trois fois
-            print("## DEBUT DE RESOLUTION (3 TIMES COLOR) ##")
+            if verbose { print("## DEBUT DE RESOLUTION (3 TIMES COLOR) ##") }
             var uniqueColor = -1
             for number in secretComposition {
                 if number != threeTimesColor {
@@ -244,7 +246,7 @@ class Game {
                     currentUniqueIndex += 1
                 }
             }
-            print("## FIN DE RESOLUTION (3 TIMES COLOR) ##")
+            if verbose { print("## FIN DE RESOLUTION (3 TIMES COLOR) ##") }
         } else {
             var oldTestCombination = [Int]()
             
@@ -256,12 +258,12 @@ class Game {
             
             if doubleTwice {
                 // Deux couleurs en double
-                print("## DEBUT DE RESOLUTION AVEC 2 COULEURS 2X ##")
+                if verbose { print("## DEBUT DE RESOLUTION AVEC 2 COULEURS 2X ##") }
                 testCombination = [secretComposition[0], secretComposition[2]]
                 lastCompoElements = [secretComposition[1], secretComposition[3]]
             } else if twiceColor != -1 {
                 // Une couleur en double
-                print("## DEBUT DE RESOLUTION AVEC COULEUR 2X ##")
+                if verbose { print("## DEBUT DE RESOLUTION AVEC COULEUR 2X ##") }
                 var uniqueIndexes = [Int]()
                 for i in 0..<secretComposition.count where secretComposition[i] != twiceColor {
                     uniqueIndexes.append(i)
@@ -270,7 +272,7 @@ class Game {
                 lastCompoElements = [twiceColor, twiceColor]
             } else {
                 // Résolution de base
-                print("## DEBUT DE RESOLUTION DE BASE ##")
+                if verbose { print("## DEBUT DE RESOLUTION DE BASE ##") }
                 testCombination = [secretComposition[0], secretComposition[1]]
                 lastCompoElements = [secretComposition[2], secretComposition[3]]
             }
@@ -351,7 +353,7 @@ class Game {
                 }
             }
             
-            print("## FIN DE RESOLUTION DE BASE ##")
+            if verbose { print("## FIN DE RESOLUTION DE BASE ##") }
         }
     }
 

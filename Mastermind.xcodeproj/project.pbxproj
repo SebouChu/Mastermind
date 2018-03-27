@@ -15,6 +15,8 @@
 		D02F24D42060EAD1003D78E6 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02F24D32060EAD1003D78E6 /* Game.swift */; };
 		D02F24D62060EADB003D78E6 /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02F24D52060EADB003D78E6 /* Round.swift */; };
 		D08B12202068DD3800BBE32A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D08B121F2068DD3700BBE32A /* GoogleService-Info.plist */; };
+		D09965DA2069AE3600F0B2FB /* OldGameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09965D92069AE3600F0B2FB /* OldGameTableViewController.swift */; };
+		D09965DC2069AE4600F0B2FB /* OldRoundTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09965DB2069AE4600F0B2FB /* OldRoundTableViewCell.swift */; };
 		D0A8B7552060E67E00F5E543 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B7542060E67E00F5E543 /* AppDelegate.swift */; };
 		D0A8B7572060E67E00F5E543 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A8B7562060E67E00F5E543 /* MainMenuViewController.swift */; };
 		D0A8B75A2060E67E00F5E543 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0A8B7582060E67E00F5E543 /* Main.storyboard */; };
@@ -37,6 +39,8 @@
 		D02F24D32060EAD1003D78E6 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 		D02F24D52060EADB003D78E6 /* Round.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
 		D08B121F2068DD3700BBE32A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D09965D92069AE3600F0B2FB /* OldGameTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldGameTableViewController.swift; sourceTree = "<group>"; };
+		D09965DB2069AE4600F0B2FB /* OldRoundTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldRoundTableViewCell.swift; sourceTree = "<group>"; };
 		D0A8B7512060E67E00F5E543 /* Mastermind.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mastermind.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0A8B7542060E67E00F5E543 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0A8B7562060E67E00F5E543 /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +134,8 @@
 				D02F24D12060EABD003D78E6 /* RoundTableViewCell.swift */,
 				D0EC0031206938DE0045087E /* HistoryTableViewController.swift */,
 				D0EC002F206938C80045087E /* HistoryTableViewCell.swift */,
+				D09965D92069AE3600F0B2FB /* OldGameTableViewController.swift */,
+				D09965DB2069AE4600F0B2FB /* OldRoundTableViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -305,7 +311,9 @@
 				D0A8B7572060E67E00F5E543 /* MainMenuViewController.swift in Sources */,
 				D02F24D42060EAD1003D78E6 /* Game.swift in Sources */,
 				D0057CB3206928B900A0AD83 /* RegisterViewController.swift in Sources */,
+				D09965DC2069AE4600F0B2FB /* OldRoundTableViewCell.swift in Sources */,
 				D0EC0032206938DE0045087E /* HistoryTableViewController.swift in Sources */,
+				D09965DA2069AE3600F0B2FB /* OldGameTableViewController.swift in Sources */,
 				D0A8B76B2060E7CA00F5E543 /* GameViewController.swift in Sources */,
 				D0057CB5206928CC00A0AD83 /* LoginViewController.swift in Sources */,
 				D02F24D22060EABD003D78E6 /* RoundTableViewCell.swift in Sources */,
