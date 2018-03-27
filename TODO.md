@@ -1,3 +1,3 @@
 # TODO
 
-- Add user history with FirebaseDatabase
+- Currently empty...
