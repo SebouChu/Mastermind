@@ -74,6 +74,50 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D0857E29206A28660044B701 /* Main Menu */ = {
+			isa = PBXGroup;
+			children = (
+				D0A8B7562060E67E00F5E543 /* MainMenuViewController.swift */,
+			);
+			path = "Main Menu";
+			sourceTree = "<group>";
+		};
+		D0857E2A206A288C0044B701 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				D0057CB2206928B900A0AD83 /* RegisterViewController.swift */,
+				D0057CB4206928CC00A0AD83 /* LoginViewController.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		D0857E2B206A289D0044B701 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				D0A8B76A2060E7CA00F5E543 /* GameViewController.swift */,
+				D02F24D12060EABD003D78E6 /* RoundTableViewCell.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		D0857E2C206A28AA0044B701 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				D0EC0031206938DE0045087E /* HistoryTableViewController.swift */,
+				D0EC002F206938C80045087E /* HistoryTableViewCell.swift */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
+		D0857E2D206A28B40044B701 /* Old Game */ = {
+			isa = PBXGroup;
+			children = (
+				D09965D92069AE3600F0B2FB /* OldGameTableViewController.swift */,
+				D09965DB2069AE4600F0B2FB /* OldRoundTableViewCell.swift */,
+			);
+			path = "Old Game";
+			sourceTree = "<group>";
+		};
 		D0A8B7482060E67D00F5E543 = {
 			isa = PBXGroup;
 			children = (
@@ -127,15 +171,11 @@
 			isa = PBXGroup;
 			children = (
 				D0A8B7542060E67E00F5E543 /* AppDelegate.swift */,
-				D0A8B7562060E67E00F5E543 /* MainMenuViewController.swift */,
-				D0057CB2206928B900A0AD83 /* RegisterViewController.swift */,
-				D0057CB4206928CC00A0AD83 /* LoginViewController.swift */,
-				D0A8B76A2060E7CA00F5E543 /* GameViewController.swift */,
-				D02F24D12060EABD003D78E6 /* RoundTableViewCell.swift */,
-				D0EC0031206938DE0045087E /* HistoryTableViewController.swift */,
-				D0EC002F206938C80045087E /* HistoryTableViewCell.swift */,
-				D09965D92069AE3600F0B2FB /* OldGameTableViewController.swift */,
-				D09965DB2069AE4600F0B2FB /* OldRoundTableViewCell.swift */,
+				D0857E29206A28660044B701 /* Main Menu */,
+				D0857E2A206A288C0044B701 /* Authentication */,
+				D0857E2B206A289D0044B701 /* Game */,
+				D0857E2C206A28AA0044B701 /* History */,
+				D0857E2D206A28B40044B701 /* Old Game */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
