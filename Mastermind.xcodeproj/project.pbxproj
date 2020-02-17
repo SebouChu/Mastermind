@@ -219,7 +219,6 @@
 				D0A8B74E2060E67E00F5E543 /* Frameworks */,
 				D0A8B74F2060E67E00F5E543 /* Resources */,
 				0BB604D94970F3B531A2241C /* [CP] Embed Pods Frameworks */,
-				4D60B8F7D9225637D6865EEC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -287,7 +286,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Mastermind/Pods-Mastermind-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Mastermind/Pods-Mastermind-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
@@ -304,22 +303,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Mastermind/Pods-Mastermind-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4D60B8F7D9225637D6865EEC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Mastermind/Pods-Mastermind-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Mastermind/Pods-Mastermind-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AC1898230A35428F0F2EBB72 /* [CP] Check Pods Manifest.lock */ = {
